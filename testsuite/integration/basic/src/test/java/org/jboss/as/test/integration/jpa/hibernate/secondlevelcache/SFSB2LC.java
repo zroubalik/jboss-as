@@ -91,6 +91,7 @@ public class SFSB2LC {
 	public String sameSessionCheck(String CACHE_REGION_NAME) {
 		
 		Statistics stats = sessionFactory.getStatistics();
+		stats.clear();
 		SecondLevelCacheStatistics emp2LCStats = stats.getSecondLevelCacheStatistics(CACHE_REGION_NAME+"Employee");
 		Session session = sessionFactory.openSession();
 		
@@ -129,15 +130,16 @@ public class SFSB2LC {
 	public String secondSessionCheck(String CACHE_REGION_NAME) {
 		
 		Statistics stats = sessionFactory.getStatistics();
+		stats.clear();
 		SecondLevelCacheStatistics emp2LCStats = stats.getSecondLevelCacheStatistics(CACHE_REGION_NAME+"Employee");
 		Session session = sessionFactory.openSession();
 		
 		try{	
-			// loading entity stored in previous session, we'are expecting second hit in cache
+			// loading entity stored in previous session, we'are expecting hit in cache
 			Employee emp = getEmployee(session, 2);
 			emp.getName();
 			assertNotNull("Employee returned", emp);
-			assertEquals("Expected 2 hits in cache"+generateEntityCacheStats(emp2LCStats), 2,  emp2LCStats.getHitCount());
+			assertEquals("Expected 1 hit in cache"+generateEntityCacheStats(emp2LCStats), 1,  emp2LCStats.getHitCount());
 			
 		}catch (AssertionError e) {
 			return e.getMessage();
@@ -154,6 +156,7 @@ public class SFSB2LC {
 	public String evict2LCCheck(String CACHE_REGION_NAME){
 
 		Statistics stats = sessionFactory.getStatistics();
+		stats.clear();
 		SecondLevelCacheStatistics emp2LCStats = stats.getSecondLevelCacheStatistics(CACHE_REGION_NAME+"Employee");
 		
 		try{	
@@ -177,6 +180,7 @@ public class SFSB2LC {
 	public String sameQueryTwice(){
 		
 		Statistics stats = sessionFactory.getStatistics();
+		stats.clear();
 		Session session = sessionFactory.openSession();
 		
 		try{
@@ -212,6 +216,7 @@ public class SFSB2LC {
 	public String invalidateQuery(){
 		
 		Statistics stats = sessionFactory.getStatistics();
+		stats.clear();
 		Session session = sessionFactory.openSession();
 
 		try{
@@ -256,6 +261,7 @@ public class SFSB2LC {
 	public String evictQueryCacheCheck(){
 		
 		Statistics stats = sessionFactory.getStatistics();
+		stats.clear();
 		Session session = sessionFactory.openSession();
 
 		try{
